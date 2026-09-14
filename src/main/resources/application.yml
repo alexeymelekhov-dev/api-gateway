@@ -1,6 +1,28 @@
 spring:
   application:
     name: api-gateway
+
+  security:
+    oauth2:
+
+      client:
+        registration:
+          keycloak:
+            client-id: api-gateway
+            client-secret: ${KEYCLOAK_CLIENT_SECRET}
+            scope:
+              - openid
+              - profile
+              - email
+
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8180/realms/file-converter
+
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/file-converter
+
   cloud:
     gateway:
       server:
@@ -9,7 +31,7 @@ spring:
             - id: flow-manager
               uri: lb://flow-manager
               predicates:
-                - Path=api/v1/files/**
+                - Path=/api/v1/files/**
 
 eureka:
   client:
