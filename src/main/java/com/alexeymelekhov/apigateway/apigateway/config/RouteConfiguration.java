@@ -13,15 +13,18 @@ import static org.springframework.cloud.gateway.server.mvc.handler.HandlerFuncti
 @Configuration
 class RouteConfiguration {
 
+    private static final String HEADER_USER_LOGIN = "X-User-Login";
+    public static final String FLOW_MANAGER = "flow-manager";
+
     @Bean
     public RouterFunction<ServerResponse> flowManagerRoute() {
-        return route("flow-manager")
+        return route(FLOW_MANAGER)
                 .route(
                         request -> request.path().startsWith("/api/v1/"),
                         http()
                 )
-                .before(UserLoginFilter.addUserLoginHeader("X-User-Login"))
-                .filter(lb("flow-manager"))
+                .before(UserLoginFilter.addUserLoginHeader(HEADER_USER_LOGIN))
+                .filter(lb(FLOW_MANAGER))
                 .build();
     }
 }
