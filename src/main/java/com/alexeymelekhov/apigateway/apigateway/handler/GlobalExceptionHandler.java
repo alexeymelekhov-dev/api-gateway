@@ -1,6 +1,7 @@
 package com.alexeymelekhov.apigateway.apigateway.handler;
 
 import com.alexeymelekhov.apigateway.apigateway.dto.ErrorResponseDTO;
+import com.alexeymelekhov.apigateway.apigateway.exception.ErrorMessage;
 import com.alexeymelekhov.apigateway.apigateway.exception.UserLoginNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,5 +18,16 @@ public class GlobalExceptionHandler {
                         HttpStatus.UNAUTHORIZED.value(),
                         e.getMessage()
                 ));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponseDTO> handleException() {
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                ErrorMessage.INTERNAL_SERVER_ERROR.getMessage()
+        );
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(error);
     }
 }
